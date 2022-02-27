@@ -11,7 +11,7 @@ add_compile_options(-std=c++14)
 find_package(Eigen3 REQUIRED)
 find_package(Glog)
 find_package(yaml-cpp REQUIRED)
-find_package(OpenCV 3.0 REQUIRED)
+find_package(OpenCV REQUIRED)
 message(STATUS "Using opencv version ${OpenCV_VERSION}")
 
 
@@ -27,14 +27,8 @@ include_directories(
     ${YAML_INCLUDE_DIRS}
 )
 
-
-add_library(${PROJECT_NAME} SHARED
-  lidar_camera_calib.cc
-)
-
-add_executable(lidar_camera_calib_tool main.cpp)
-target_link_libraries(lidar_camera_calib_tool
-    ${PROJECT_NAME}
+add_executable(${PROJECT_NAME} main.cpp lidar_camera_calib.cc)
+target_link_libraries(${PROJECT_NAME}
     ${EIGEN3_LIBS}
     ${PCL_LIBRARIES}
     ${OpenCV_LIBS}

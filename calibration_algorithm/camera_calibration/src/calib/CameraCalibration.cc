@@ -18,6 +18,10 @@
 #include "camodocal/camera_models/CostFunctionFactory.h"
 
 #include "ceres/ceres.h"
+
+#include <opencv2/imgproc/types_c.h>
+#include <opencv2/imgproc/imgproc_c.h>
+
 namespace camodocal
 {
 
