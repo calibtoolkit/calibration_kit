@@ -15,32 +15,17 @@
  *****************************************************************************/
 
 #include "lidar_camera_calib.hpp"
+#include <iostream>
+#include <cassert>
+#include <yaml-cpp/yaml.h>
 
 namespace kit {
 namespace tools {
 
-LidarCameraCalib::LidarCameraCalib(
-        const std::string &cam_intrinsic_file,
-        const std::string &cam_lidar_extrinsic_file)
+LidarCameraCalib::LidarCameraCalib(const std::string &cam_intrinsic_file, const std::string &cam_lidar_extrinsic_file)
 {
-
-    bool success = LoadIntrinsic(cam_intrinsic_file, &D, &K);
-    if (!success)
-    {
-        std::cerr << "Load camera extrinsic failed." << std::endl;
-        return;
-    };
-    success = LoadExtrinsic(cam_lidar_extrinsic_file, &cam_extrinsic);
-    if (!success)
-    {
-        std::cerr << "Load camera extrinsic failed." << std::endl;
-        return;
-    }
-    std::cout << "[INFO] Success Init!" << std::endl;
-}
-
-LidarCameraCalib::~LidarCameraCalib()
-{
+    LoadIntrinsic(cam_intrinsic_file, &D, &K);
+    LoadExtrinsic(cam_lidar_extrinsic_file, &cam_extrinsic);
 }
 
 void LidarCameraCalib::StartCalib(const cv::Mat &image, pcl::PointCloud<kit::tools::PointXYZIT>::Ptr &cloud_read)
@@ -74,11 +59,6 @@ void LidarCameraCalib::StartCalib(const cv::Mat &image, pcl::PointCloud<kit::too
     cv::createTrackbar("z", "mainWin", &value_z, 100, UpdateZ, this);
 
     Project();
-
-    while (1)
-    {
-        cv::waitKey(100);
-    }
 }
 
 void LidarCameraCalib::StartCalib(const cv::Mat &image, pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud_read)
@@ -103,11 +83,6 @@ void LidarCameraCalib::StartCalib(const cv::Mat &image, pcl::PointCloud<pcl::Poi
     cv::createTrackbar("z", "mainWin", &value_z, 100, UpdateZ, this);
 
     Project();
-
-    while (1)
-    {
-        cv::waitKey(100);
-    }
 }
 
 void LidarCameraCalib::Project()
@@ -144,7 +119,8 @@ void LidarCameraCalib::Project()
     cv::projectPoints(object_points, cv::Mat::zeros(3, 1, CV_32FC1),
                       cv::Mat::zeros(3, 1, CV_32FC1), K, tmp_D, image_points);
     assert(object_points.size() == image_points.size());
-    assert(object_points[0].x == image_points[0].x);
+    //assert(object_points[0].x == image_points[0].x);
+    std::cout << object_points[0].x - image_points[0].x << std::endl;
 
     cv::Mat test_image = undistort_image.clone();
     std::cout << "Projected Finished! " << std::endl;
@@ -167,7 +143,8 @@ void LidarCameraCalib::Project()
     }
 
     cv::imshow("mainWin", test_image);
-    cv::waitKey(100);
+    cv::waitKey(0);
+    cv::destroyWindow("mainWin");
 }
 
 void LidarCameraCalib::UpdateYaw(int value, void *this_ptr)
@@ -212,10 +189,10 @@ void LidarCameraCalib::UpdateZ(int value, void* this_ptr)
     calib_ptr->Project();
 }
 
-bool LidarCameraCalib::LoadExtrinsic(const std::string &file_path, Eigen::Affine3d *extrinsic)
+void LidarCameraCalib::LoadExtrinsic(const std::string &file_path, Eigen::Affine3d *extrinsic)
 {
     YAML::Node config = YAML::LoadFile(file_path);
-    std::cout << "-----------------------------------------" << std::endl;
+
     if (config["transform"]) {
         if (config["transform"]["translation"]) {
             extrinsic->translation()(0) =
@@ -231,23 +208,14 @@ bool LidarCameraCalib::LoadExtrinsic(const std::string &file_path, Eigen::Affine
                 double qw = config["transform"]["rotation"]["w"].as<double>();
                 extrinsic->linear() =
                     Eigen::Quaterniond(qw, qx, qy, qz).toRotationMatrix();
-                return true;
             }
         }
     }
-    return false;
 }
 
-bool LidarCameraCalib::LoadIntrinsic(const std::string &intrinsics_path,
-                                     cv::Mat *dist_coeffs,
-                                     cv::Mat *intrisic_mat)
+void LidarCameraCalib::LoadIntrinsic(const std::string &intrinsics_path, cv::Mat *dist_coeffs, cv::Mat *intrisic_mat)
 {
-    if (!(boost::filesystem::exists(intrinsics_path)))
-    {
-        return false;
-    }
     YAML::Node config = YAML::LoadFile(intrinsics_path);
-    std::cout << "-----------------------------------------" << std::endl;
 
     if (config["K"] && config["D"])
     {
@@ -267,8 +235,6 @@ bool LidarCameraCalib::LoadIntrinsic(const std::string &intrinsics_path,
             dist_coeffs->at<double>(i) = D[i];
         }
     }
-
-    return true;
 }
 
 }  // namespace tools

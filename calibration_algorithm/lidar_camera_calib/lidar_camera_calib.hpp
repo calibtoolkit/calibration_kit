@@ -1,7 +1,4 @@
-#include <fstream>
-#include <iostream>
 #include <string>
-#include <cassert>
 #include <Eigen/Core>
 
 #include <opencv2/opencv.hpp>
@@ -9,11 +6,6 @@
 #include <pcl/conversions.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
-
-#include "gflags/gflags.h"
-#include "yaml-cpp/yaml.h"
-#include <glog/logging.h>
-#include "omp.h"
 
 namespace kit {
 namespace tools {
@@ -45,18 +37,15 @@ public:
 
 public:
 
-    LidarCameraCalib(const std::string &cam_intrinsic_file,
-                     const std::string &cam_lidar_extrinsic_file);
-    ~LidarCameraCalib();
+    LidarCameraCalib(const std::string &cam_intrinsic_file, const std::string &cam_lidar_extrinsic_file);
+    ~LidarCameraCalib() = default;
 
     void StartCalib(const cv::Mat &image, pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud_read);
 
     void StartCalib(const cv::Mat &image, pcl::PointCloud<kit::tools::PointXYZIT>::Ptr &cloud_read);
 
-    bool LoadExtrinsic(const std::string &file_path, Eigen::Affine3d *extrinsic);
-    bool LoadIntrinsic(const std::string &intrinsics_path,
-                                         cv::Mat *dist_coeffs,
-                                         cv::Mat *intrisic_mat);
+    void LoadExtrinsic(const std::string &file_path, Eigen::Affine3d *extrinsic);
+    void LoadIntrinsic(const std::string &intrinsics_path, cv::Mat *dist_coeffs, cv::Mat *intrisic_mat);
 
     void Project();
 
@@ -67,9 +56,6 @@ public:
     static void UpdatePitch(int value, void* this_ptr);
     static void UpdateYaw(int value, void* this_ptr);
 };
-
-
-
 
 } // namespace tools
 } // namespace kit
