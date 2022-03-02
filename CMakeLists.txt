@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 3.12)
 
 # --- Fetch FTXUI --------------------------------------------------------------
+
 include(FetchContent)
 
 FetchContent_Declare(ftxui
@@ -26,6 +27,7 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 add_subdirectory(calibration_algorithm/lidar_camera_calib)
+add_subdirectory(calibration_algorithm/camera_calibration)
 
 add_executable(calibration_kit src/main.cpp)
 target_compile_features(calibration_kit PRIVATE cxx_std_17)
@@ -35,6 +37,5 @@ target_link_libraries(calibration_kit PRIVATE
   ftxui::dom
   ftxui::component
   lidar_camera_calib
+  camera_model
 )
-
-#install(TARGETS ftxui-starter RUNTIME DESTINATION "bin")
