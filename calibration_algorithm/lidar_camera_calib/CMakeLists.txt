@@ -12,9 +12,9 @@ link_directories( ${PCL_LIBRARY_DIRS} )
 add_library(lidar_camera_calib OBJECT lidar_camera_calib.cc)
 
 target_compile_features(lidar_camera_calib PRIVATE cxx_std_14)
-target_compile_definitions(lidar_camera_calib PRIVATE ${PCL_DEFINITIONS})
+#target_compile_definitions(lidar_camera_calib PRIVATE ${PCL_DEFINITIONS})
 
-target_include_directories(lidar_camera_calib PRIVATE
+target_include_directories(lidar_camera_calib PUBLIC
     ${EIGEN3_INCLUDE_DIR}
     ${PCL_INCLUDE_DIRS}
     ${YAML_INCLUDE_DIRS}

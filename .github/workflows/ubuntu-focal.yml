@@ -1,0 +1,42 @@
+name: Ubuntu 20.04 
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+
+  build:
+    name: build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install boost
+        run: sudo apt-get install libboost-dev
+
+      - name: install opencv
+        run: sudo apt-get install libopencv-dev
+
+      - name: install eigen
+        run: sudo apt-get install libeigen3-dev
+        
+      - name: install pcl
+        run: sudo apt-get install libpcl-dev
+
+      - name: install ceres
+        run: sudo apt-get install libceres-dev
+
+      - name: install yaml-cpp
+        run: sudo apt-get install libyaml-cpp-dev        
+        
+      - name: cmake configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+      - name: cmake build
+        run: cmake --build build --parallel 1

@@ -24,7 +24,7 @@ find_package(CERES REQUIRED)
 include_directories(${CERES_INCLUDE_DIRS})
 link_directories(${CERES_LIBRARY_DIRS})
 
-find_package(Boost 1.66 COMPONENTS filesystem program_options REQUIRED)
+find_package(Boost 1.65 COMPONENTS filesystem program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 message(${Boost_LIBRARY_DIRS})

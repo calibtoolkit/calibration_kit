@@ -1,0 +1,48 @@
+name: Ubuntu 18.04 
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+
+  build:
+    name: build
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install boost
+        run: sudo apt-get install libboost-dev
+
+      - name: install opencv
+        run: sudo apt-get install libopencv-dev
+
+      - name: install eigen
+        run: sudo apt-get install libeigen3-dev
+        
+      - name: install pcl
+        run: sudo apt-get install libpcl-dev
+
+      - name: install ceres
+        run: sudo apt-get install libceres-dev
+
+      - name: install yaml-cpp
+        run: sudo apt-get install libyaml-cpp-dev
+
+      - name: install compiler
+        run: sudo apt install gcc-8 g++-8
+        
+      - name: cmake configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+        env:
+          CC: gcc-8
+          CXX: g++-8
+
+      - name: cmake build
+        run: cmake --build build --parallel 1
