@@ -9,6 +9,10 @@ FetchContent_Declare(ftxui
         GIT_TAG v2.0.0
         )
 
+set(FTXUI_BUILD_DOCS OFF)
+set(FTXUI_BUILD_EXAMPLES OFF)
+set(FTXUI_ENABLE_INSTALL OFF)
+
 FetchContent_GetProperties(ftxui)
 if(NOT ftxui_POPULATED)
   FetchContent_Populate(ftxui)
