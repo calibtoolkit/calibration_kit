@@ -73,6 +73,30 @@ namespace lidar_align {
                     pose = init_pose_inv * pose;
                     double timestamp = std::atof(split_str[0].c_str());
                     odom.addTransformData(timestamp, pose);
+                } else if (split_str.size() == 9) {
+                    Transform::Rotation quat(std::atof(split_str[8].c_str()),
+                                             std::atof(split_str[5].c_str()),
+                                             std::atof(split_str[6].c_str()),
+                                             std::atof(split_str[7].c_str()));
+                    Transform::Translation trans(std::atof(split_str[2].c_str()),
+                                                 std::atof(split_str[3].c_str()),
+                                                 std::atof(split_str[4].c_str()));
+
+                    int zone_id = GetUtmZoneID(trans[0]);
+                    double lon = trans[0];
+                    double lat = trans[1];
+                    // WGS84ToUTM(&lon, &lat, zone_id);
+                    trans[0] = lon;
+                    trans[1] = lat;
+                    Transform pose = Transform(trans, quat);
+
+                    if (first_frame) {
+                        init_pose_inv = pose.inverse();
+                        first_frame = false;
+                    }
+                    pose = init_pose_inv * pose;
+                    double timestamp = std::atof(split_str[1].c_str());
+                    odom.addTransformData(timestamp, pose);
                 } else {
                     std::cerr << "The format of poses.txt is wrong." << std::endl;
                 }
@@ -85,30 +109,53 @@ namespace lidar_align {
         }
 
         std::string pcd_path = conf_data["pcd_dir"];
-        std::string fileExtension = ".pcd";
-
-        boost::filesystem::directory_iterator itr;
-        for (boost::filesystem::directory_iterator itr(pcd_path);
-             itr != boost::filesystem::directory_iterator(); ++itr) {
-            if (!boost::filesystem::is_regular_file(itr->status())) {
-                continue;
-            }
-
-            std::string filename = itr->path().filename().string();
-            // check if file extension matches
-            if (filename.compare(filename.length() - fileExtension.length(),
-                                 fileExtension.length(), fileExtension) != 0) {
-                continue;
-            }
-
-            std::string pcd_timestamp = filename.substr(0, filename.length() - fileExtension.length());
-            pcd_timestamp_.push_back(std::atof(pcd_timestamp.c_str()));
-            pcd_dirs_.push_back(itr->path().string());
+        if (pcd_path[pcd_path.size() - 1] != '/') {
+            pcd_path += "/";
         }
 
-        std::cout<<"odom_size is "<<odom.getOdomTransformSize()<<std::endl;
-        std::cout<<"pcd size is "<<pcd_dirs_.size()<<std::endl;
+        std::string pcd_timestamp_path = pcd_path + "pcd_timestamp.txt";
+        std::ifstream fp_pcd_timestamp(pcd_timestamp_path.c_str());
 
+        if (!fp_pcd_timestamp.eof()) {
+            std::string line;
+            while (std::getline(fp_pcd_timestamp, line)) {
+                std::vector<std::string> split_str;
+                boost::split(split_str, line, boost::is_any_of("  ,\t"));
+                std::string fileExtension = ".pcd";
+
+                std::string pcd_timestamp = split_str[1];
+                pcd_timestamp_.push_back(std::atof(pcd_timestamp.c_str()));
+                pcd_dirs_.push_back(pcd_path + split_str[0] + fileExtension);
+            }
+        }
+
+        //
+
+        // boost::filesystem::directory_iterator itr;
+        // for (boost::filesystem::directory_iterator itr(pcd_path);
+        //      itr != boost::filesystem::directory_iterator(); ++itr) {
+        //     if (!boost::filesystem::is_regular_file(itr->status())) {
+        //         continue;
+        //     }
+
+        //     std::string filename = itr->path().filename().string();
+        //     // check if file extension matches
+        //     if (filename.compare(filename.length() -
+        //     fileExtension.length(),
+        //                          fileExtension.length(), fileExtension)
+        //                          != 0) {
+        //         continue;
+        //     }
+
+        //     std::string pcd_timestamp = filename.substr(0,
+        //     filename.length() - fileExtension.length());
+        //     pcd_timestamp_.push_back(std::atof(pcd_timestamp.c_str()));
+        //     pcd_dirs_.push_back(itr->path().string());
+        // }
+
+        std::cout << "odom_size is " << odom.getOdomTransformSize()
+                  << std::endl;
+        std::cout << "pcd size is " << pcd_dirs_.size() << std::endl;
     }
 
 }  // namespace lidar_align
