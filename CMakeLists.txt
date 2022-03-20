@@ -28,8 +28,14 @@ ENDIF()
 
 add_subdirectory(calibration_algorithm/lidar_camera_calib)
 add_subdirectory(calibration_algorithm/camera_calibration)
+add_subdirectory(calibration_algorithm/lidar_align)
+add_subdirectory(calibration_algorithm/lidar2lidar)
 
-add_executable(calibration_kit src/main.cpp)
+add_executable(calibration_kit
+        src/main.cpp
+        src/nonlinear_optimization_demo.cpp
+        )
+
 target_compile_features(calibration_kit PRIVATE cxx_std_17)
 
 target_link_libraries(calibration_kit PRIVATE
@@ -38,4 +44,6 @@ target_link_libraries(calibration_kit PRIVATE
   ftxui::component
   lidar_camera_calib
   camera_model
+  lidar_align
+  lidar2lidar
 )

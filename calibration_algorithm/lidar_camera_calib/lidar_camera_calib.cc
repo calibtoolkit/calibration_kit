@@ -119,8 +119,6 @@ void LidarCameraCalib::Project()
     cv::projectPoints(object_points, cv::Mat::zeros(3, 1, CV_32FC1),
                       cv::Mat::zeros(3, 1, CV_32FC1), K, tmp_D, image_points);
     assert(object_points.size() == image_points.size());
-    //assert(object_points[0].x == image_points[0].x);
-    std::cout << object_points[0].x - image_points[0].x << std::endl;
 
     cv::Mat test_image = undistort_image.clone();
     std::cout << "Projected Finished! " << std::endl;
