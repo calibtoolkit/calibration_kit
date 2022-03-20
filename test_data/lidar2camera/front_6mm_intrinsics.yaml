@@ -1,0 +1,20 @@
+header:
+  seq: 0
+  stamp:
+    secs: 0
+    nsecs: 0
+  frame_id: front_6mm
+height: 1080
+width: 1920
+distortion_model: plumb_bob
+D: [-0.543150, 0.273259, 0.001871, -0.003192, 0.000000]
+K: [1963.830123, 0.000000, 939.819817, 0.000000, 1961.290279, 509.627512,0.000000, 0.000000, 1.000000]
+R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+binning_x: 0
+binning_y: 0
+roi:
+  x_offset: 0
+  y_offset: 0
+  height: 0
+  width: 0
+  do_rectify: False

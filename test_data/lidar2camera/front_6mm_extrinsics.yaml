@@ -1,0 +1,17 @@
+header:
+  seq: 0
+  frame_id: lidar16
+  stamp:
+    nsecs: 0
+    secs: 0
+child_frame_id: front_6mm
+transform:
+  rotation:
+    x: -0.525367
+    y: 0.492552
+    z: -0.473124
+    w: 0.50748
+  translation:
+    x: -0.01
+    y: -0.08
+    z: -0.22
