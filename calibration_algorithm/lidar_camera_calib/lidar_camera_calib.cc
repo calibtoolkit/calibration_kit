@@ -59,6 +59,8 @@ void LidarCameraCalib::StartCalib(const cv::Mat &image, pcl::PointCloud<kit::too
     cv::createTrackbar("z", "mainWin", &value_z, 100, UpdateZ, this);
 
     Project();
+    cv::waitKey(0);
+    cv::destroyWindow("mainWin");
 }
 
 void LidarCameraCalib::StartCalib(const cv::Mat &image, pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud_read)
@@ -83,6 +85,8 @@ void LidarCameraCalib::StartCalib(const cv::Mat &image, pcl::PointCloud<pcl::Poi
     cv::createTrackbar("z", "mainWin", &value_z, 100, UpdateZ, this);
 
     Project();
+    cv::waitKey(0);
+    cv::destroyWindow("mainWin");
 }
 
 void LidarCameraCalib::Project()
@@ -141,8 +145,6 @@ void LidarCameraCalib::Project()
     }
 
     cv::imshow("mainWin", test_image);
-    cv::waitKey(0);
-    cv::destroyWindow("mainWin");
 }
 
 void LidarCameraCalib::UpdateYaw(int value, void *this_ptr)
