@@ -3,7 +3,7 @@
 [![Ubuntu 20.04](https://github.com/calibtoolkit/calibration_kit/actions/workflows/ubuntu-focal.yml/badge.svg)](https://github.com/calibtoolkit/calibration_kit/actions/workflows/ubuntu-focal.yml)
 [![Ubuntu 18.04](https://github.com/calibtoolkit/calibration_kit/actions/workflows/ubuntu-bionic.yml/badge.svg)](https://github.com/calibtoolkit/calibration_kit/actions/workflows/ubuntu-bionic.yml)
 
-`calibration_kit` 是一个常用传感器标定算法集合工具，包含了单双目相机标定、相机-激光雷达标定、激光雷达-激光雷达标定、激光雷达-IMU标定
+`calibration_kit` 是一个常用传感器标定算法集合工具，包含了单双目相机标定、相机-激光雷达标定、激光雷达-激光雷达标定、激光雷达-IMU标定。
 
 ## 构建
 
@@ -55,4 +55,4 @@ $ ./build/calibration_kit
 
 ## 目录结构及算法入口
 
-`calibration_kit` 使用FTXUI实现命令行界面，`src` 中的代码是界面实现，`calibration_algorithm` 目录中的代码是所有标定算法实现，`src/main.cpp` 中每一个类对应一个界面，在标定界面中点击start后相应类中的 `calibration` 函数会被调用执行标定流程
+`calibration_kit` 使用FTXUI实现命令行界面，`src` 中的代码是界面实现，`calibration_algorithm` 目录中的代码是所有标定算法实现，`src/main.cpp` 中每一个类对应一个界面，在标定界面中点击start后相应类中的 `calibration` 函数会被调用执行标定流程。
