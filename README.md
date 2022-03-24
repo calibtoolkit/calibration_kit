@@ -7,6 +7,10 @@
 
 ## 构建
 
+有两种方式供选择，既可以选择在本地电脑构建，也可以直接使用docker构建
+
+## 一.本地构建
+
 ### 工具链要求
 
 CMake >= 3.13
@@ -40,6 +44,41 @@ $ cmake --build build --parallel 4
 ```
 
 4、执行程序
+
+```shell
+$ ./build/calibration_kit
+```
+
+## 二.Docker构建
+
+### 步骤
+
+1.下拉docker
+
+```
+$ docker pull asd741573661/ros-noetic:calib_kit_v1
+```
+
+2.本地电脑授权XServer
+
+```
+$ xhost +local:docker
+```
+
+3.进入到工程calibration_kit目录，运行下面命令，进入docker
+
+```
+$ sudo sh docker/calib_kit_docker_start.sh
+```
+
+4.执行构建
+
+```shell
+$ cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug 
+$ cmake --build build --parallel 4
+```
+
+5.执行程序
 
 ```shell
 $ ./build/calibration_kit
