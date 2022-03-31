@@ -53,10 +53,11 @@ $ ./build/calibration_kit
 
 ### 步骤
 
-1.下拉docker
+1.构建docker镜像
 
 ```
-$ docker pull asd741573661/ros-noetic:calib_kit_v1
+$ cd docker
+$ sudo docker-compose build  
 ```
 
 2.本地电脑授权XServer
