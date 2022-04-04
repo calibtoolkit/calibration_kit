@@ -89,7 +89,7 @@ $ ./build/calibration_kit
 
 所有测试数据位于test_data目录下，lidar2imu由于数据量过大保存在网盘中
 
-链接：https://pan.baidu.com/s/1NUOQ8msgWU6wxaIIxxaGvQ  提取码：slsd
+链接：https://pan.baidu.com/s/1O1veeILSenSRBF089xvnaA  提取码：slsd
 
 使用此数据时请确保 `calibration_kit` 启动目录与 `lidar2imu` 数据中的 `.ini` 文件位于相同目录，如果不同，需要将 `.ini` 文件中的相对路径改为绝对路径
 
