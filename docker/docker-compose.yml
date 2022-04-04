@@ -1,0 +1,10 @@
+version: '3.4'
+services:
+  calibration_kit:
+    build:
+      context: .
+      dockerfile: calibration_kit.Dockerfile
+      network: host
+    image: sensor_fusion/calib_kit:v1
+    container_name: calib_kit
+
