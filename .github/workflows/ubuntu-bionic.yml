@@ -16,7 +16,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      
+      - name: apt update
+        run: sudo apt-get -qqq update
+        
       - name: install boost
         run: sudo apt-get install libboost-dev
 
